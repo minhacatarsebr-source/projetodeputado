@@ -20,6 +20,8 @@ KOMMO_TOKEN     = os.getenv("KOMMO_TOKEN")
 BATCH_SIZE      = 250
 
 def build_contact_payload(row: dict) -> dict:
+    if not row.get("phone_e164"):
+        raise ValueError(f"Contato '{row.get('name', '?')}' sem phone_e164")
     phone = "+" + row["phone_e164"]
     custom_fields = [
         {"field_code": "PHONE", "values": [{"value": phone, "enum_code": "WORK"}]},
@@ -59,7 +61,11 @@ def import_contacts(csv_path: str):
         print(f"  Lote {i}/{len(batches)} ({len(batch)} contatos)...", end=" ")
         resp = requests.post(url, json=batch, headers=headers)
         if resp.status_code in (200, 201):
-            imported = len(resp.json().get("_embedded", {}).get("contacts", []))
+            data = resp.json()
+            contacts = data.get("_embedded", {}).get("contacts", [])
+            if not contacts and "_embedded" not in data:
+                print(f"AVISO: Resposta inesperada do Kommo: {str(data)[:200]}")
+            imported = len(contacts)
             total_ok += imported
             print(f"OK ({imported} importados)")
         else:

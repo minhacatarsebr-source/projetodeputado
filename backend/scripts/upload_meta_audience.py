@@ -49,6 +49,8 @@ def get_or_create_audience(account: AdAccount) -> str:
     return audience["id"]
 
 def upload_audience(csv_path: str):
+    if not ACCESS_TOKEN or not AD_ACCOUNT_ID:
+        raise EnvironmentError("META_ACCESS_TOKEN e META_AD_ACCOUNT_ID precisam estar no .env")
     FacebookAdsApi.init(access_token=ACCESS_TOKEN)
     account  = AdAccount(AD_ACCOUNT_ID)
     aud_id   = get_or_create_audience(account)
@@ -63,9 +65,14 @@ def upload_audience(csv_path: str):
     for i, batch in enumerate(batches, 1):
         print(f"  Lote {i}/{len(batches)} ({len(batch)} telefones)...", end=" ")
         payload = build_user_payload(batch)
-        audience.create_users_replace(params={"payload": payload}) if i == 1 else \
-        audience.create_users(params={"payload": payload})
-        print("OK")
+        try:
+            if i == 1:
+                audience.create_users_replace(params={"payload": payload})
+            else:
+                audience.create_users(params={"payload": payload})
+            print("OK")
+        except Exception as e:
+            print(f"ERRO no lote {i}: {e}")
         time.sleep(1)
 
     print(f"\nAudiência {AUDIENCE_NAME} atualizada com {len(phones)} telefones.")

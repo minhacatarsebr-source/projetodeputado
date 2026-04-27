@@ -24,6 +24,10 @@ def test_normalize_phone_invalid_returns_none():
     assert normalize_phone("") is None
     assert normalize_phone(None) is None
 
+def test_normalize_phone_handles_pandas_nan():
+    import numpy as np
+    assert normalize_phone(np.nan) is None
+
 def test_detect_columns_finds_phone():
     df = pd.DataFrame(columns=["Nome", "Celular", "Cidade"])
     cols = detect_columns(df)
@@ -51,3 +55,15 @@ def test_clean_dataframe_drops_invalid_phones():
     })
     result = clean_dataframe(df, {"name": "nome", "phone": "celular", "city": "municipio"})
     assert len(result) == 1
+
+def test_main_raises_on_missing_required_column(tmp_path):
+    import sys, os
+    sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'backend'))
+    from scripts.clean_voter_data import main
+    # Excel with no recognizable name/phone columns
+    df = pd.DataFrame({"coluna_estranha": ["a", "b"], "outra": ["c", "d"]})
+    input_file = tmp_path / "bad.xlsx"
+    df.to_excel(input_file, index=False)
+    output_file = tmp_path / "out.csv"
+    with pytest.raises(ValueError, match="Colunas não encontradas"):
+        main(str(input_file), str(output_file))

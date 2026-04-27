@@ -40,6 +40,7 @@ def detect_columns(df: pd.DataFrame) -> dict:
         for alias in aliases:
             if alias in lower_cols:
                 result[field] = lower_cols[alias]
+                print(f"  detect_columns: '{field}' → '{lower_cols[alias]}'")
                 break
     return result
 
@@ -68,7 +69,9 @@ def main(input_path: str, output_path: str):
     clean = clean_dataframe(df, cols)
     print(f"  {len(clean)} linhas após limpeza")
 
-    os.makedirs(os.path.dirname(output_path), exist_ok=True)
+    dirpart = os.path.dirname(output_path)
+    if dirpart:
+        os.makedirs(dirpart, exist_ok=True)
     clean.to_csv(output_path, index=False)
     print(f"Salvo em {output_path}")
     return clean

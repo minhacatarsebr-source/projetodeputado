@@ -1360,6 +1360,7 @@ function renderMacrorregioes(){
   if(!_untappedRendered){
     _untappedRendered=true;
     const tb2=document.getElementById('untapped-tbody');
+    if(!tb2)return;
     const prioC={'alto':'ba','medio':'bm','baixo':'bb'};
     const prioL={'alto':'⭐ ALTA','medio':'MÉDIA','baixo':'BAIXA'};
     UNTAPPED.forEach(c=>{

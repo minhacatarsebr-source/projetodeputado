@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Relatório 2026 — Cidades Mais Engajadas | Piloto Automático</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0f1a;--bg2:#111827;--bg3:#1f2937;
+  --green:#10b981;--green2:#34d399;--green-bg:rgba(16,185,129,.08);
+  --blue:#3b82f6;--blue2:#60a5fa;--blue-bg:rgba(59,130,246,.08);
+  --purple:#8b5cf6;--purple2:#a78bfa;--purple-bg:rgba(139,92,246,.08);
+  --amber:#f59e0b;--amber2:#fbbf24;--amber-bg:rgba(245,158,11,.08);
+  --red:#ef4444;
+  --text:#e5e7eb;--text2:#9ca3af;--text3:#6b7280;
+  --brd:rgba(255,255,255,.06);
+}
+html,body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;line-height:1.5}
+.container{max-width:1400px;margin:0 auto;padding:24px 32px 64px}
+.top-bar{height:3px;background:linear-gradient(90deg,var(--green),var(--blue),var(--purple))}
+
+/* HEADER */
+.header{padding:32px 0 24px;border-bottom:1px solid var(--brd);margin-bottom:32px}
+.header h1{font-size:1.8rem;font-weight:800;letter-spacing:-.02em;background:linear-gradient(135deg,var(--green2),var(--blue2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.header .sub{font-size:.85rem;color:var(--text2);margin-top:4px}
+.header .date{font-size:.72rem;color:var(--text3);margin-top:8px;letter-spacing:.05em}
+.accounts{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.acc-tag{font-size:.65rem;padding:4px 10px;background:var(--bg3);border:1px solid var(--brd);border-radius:4px;color:var(--text2)}
+.year-badge{display:inline-block;padding:4px 12px;background:linear-gradient(135deg,var(--green),var(--blue));border-radius:4px;font-size:.7rem;font-weight:700;color:#fff;margin-left:8px;vertical-align:middle}
+
+/* KPI GRID */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:32px}
+.kpi{background:var(--bg2);border:1px solid var(--brd);border-radius:8px;padding:20px}
+.kpi .label{font-size:.65rem;text-transform:uppercase;letter-spacing:.1em;color:var(--text3);margin-bottom:4px}
+.kpi .value{font-size:1.8rem;font-weight:800;line-height:1.2}
+.kpi .value.green{color:var(--green)}
+.kpi .value.blue{color:var(--blue)}
+.kpi .value.purple{color:var(--purple)}
+.kpi .value.amber{color:var(--amber)}
+.kpi .detail{font-size:.7rem;color:var(--text3);margin-top:4px}
+
+/* SECTION */
+.section{margin-bottom:40px}
+.section-title{font-size:1.1rem;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.section-title .dot{width:8px;height:8px;border-radius:50%}
+
+/* TABLE */
+.table-wrap{background:var(--bg2);border:1px solid var(--brd);border-radius:8px;overflow:hidden}
+table{width:100%;border-collapse:collapse}
+th{font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;color:var(--text3);padding:12px 16px;text-align:left;background:var(--bg3);border-bottom:1px solid var(--brd);white-space:nowrap}
+th.right,td.right{text-align:right}
+td{padding:10px 16px;font-size:.8rem;border-bottom:1px solid var(--brd)}
+tr:last-child td{border-bottom:none}
+tr:hover{background:rgba(255,255,255,.02)}
+.rank{font-weight:700;color:var(--text3);font-size:.72rem;width:32px}
+.region-name{font-weight:600}
+.bar-cell{width:200px}
+.bar-wrap{height:6px;background:rgba(255,255,255,.04);border-radius:3px;overflow:hidden}
+.bar-fill{height:100%;border-radius:3px;transition:width .6s ease}
+.bar-fill.green{background:linear-gradient(90deg,var(--green),var(--green2))}
+.bar-fill.blue{background:linear-gradient(90deg,var(--blue),var(--blue2))}
+.bar-fill.purple{background:linear-gradient(90deg,var(--purple),var(--purple2))}
+.bar-fill.amber{background:linear-gradient(90deg,var(--amber),var(--amber2))}
+.ctr-badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:.68rem;font-weight:600}
+.ctr-high{background:rgba(16,185,129,.15);color:var(--green2)}
+.ctr-mid{background:rgba(59,130,246,.15);color:var(--blue2)}
+.ctr-low{background:rgba(245,158,11,.15);color:var(--amber2)}
+.total-row td{font-weight:700;background:rgba(255,255,255,.03);border-top:2px solid var(--brd)}
+
+/* CHART GRID */
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:32px}
+.chart-card{background:var(--bg2);border:1px solid var(--brd);border-radius:8px;padding:20px}
+.chart-card h3{font-size:.8rem;font-weight:600;margin-bottom:16px;color:var(--text2)}
+.h-bar{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.h-bar-label{font-size:.72rem;color:var(--text2);min-width:140px;text-align:right}
+.h-bar-track{flex:1;height:18px;background:rgba(255,255,255,.03);border-radius:3px;overflow:hidden;position:relative}
+.h-bar-fill{height:100%;border-radius:3px;display:flex;align-items:center;padding-left:6px}
+.h-bar-val{font-size:.6rem;font-weight:600;color:rgba(255,255,255,.9);white-space:nowrap}
+.h-bar-ext{font-size:.65rem;color:var(--text3);min-width:60px;text-align:right}
+
+/* INSIGHTS */
+.insights{background:var(--bg2);border:1px solid var(--brd);border-radius:8px;padding:24px;margin-top:24px}
+.insights h3{font-size:.9rem;font-weight:700;margin-bottom:16px}
+.insight-item{display:flex;gap:12px;margin-bottom:12px;padding:12px;background:var(--bg3);border-radius:6px}
+.insight-icon{width:32px;height:32px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0}
+.insight-icon.green-bg{background:var(--green-bg)}
+.insight-icon.amber-bg{background:var(--amber-bg)}
+.insight-icon.blue-bg{background:var(--blue-bg)}
+.insight-icon.purple-bg{background:var(--purple-bg)}
+.insight-text{font-size:.78rem;color:var(--text2);line-height:1.5}
+.insight-text strong{color:var(--text);font-weight:600}
+
+/* FOOTER */
+.footer{margin-top:48px;padding-top:24px;border-top:1px solid var(--brd);font-size:.65rem;color:var(--text3);text-align:center}
+
+@media(max-width:900px){
+  .kpi-grid{grid-template-columns:repeat(2,1fr)}
+  .chart-grid{grid-template-columns:1fr}
+  .container{padding:16px}
+}
+@media(max-width:600px){
+  .kpi-grid{grid-template-columns:1fr}
+  .bar-cell{display:none}
+  .container{padding:16px}
+}
+</style>
+</head>
+<body>
+<div class="top-bar"></div>
+<div class="container">
+
+<div class="header">
+  <h1>Cidades Mais Engajadas — Piloto Automatico <span class="year-badge">2026</span></h1>
+  <div class="sub">Relatorio de engajamento por estado e regiao de SP — somente dados de 2026</div>
+  <div class="date">Gerado em 30/06/2026 | Periodo: 01/01/2026 - 30/06/2026</div>
+  <div class="accounts">
+    <span class="acc-tag">Campanha Estado 26</span>
+    <span class="acc-tag">Pre - Campanha Estado 26</span>
+    <span class="acc-tag">Campanha Capital 26</span>
+    <span class="acc-tag">Pre - Campanha Capital 26</span>
+  </div>
+</div>
+
+<!-- KPIs -->
+<div class="kpi-grid">
+  <div class="kpi">
+    <div class="label">Impressoes Totais (2026)</div>
+    <div class="value green">15,16M</div>
+    <div class="detail">Todas as 4 contas combinadas</div>
+  </div>
+  <div class="kpi">
+    <div class="label">Cliques Totais (2026)</div>
+    <div class="value blue">268.187</div>
+    <div class="detail">Interacoes diretas com anuncios</div>
+  </div>
+  <div class="kpi">
+    <div class="label">Investimento Total (2026)</div>
+    <div class="value purple">R$ 59.216</div>
+    <div class="detail">Soma das 4 contas</div>
+  </div>
+  <div class="kpi">
+    <div class="label">CTR Medio Ponderado</div>
+    <div class="value amber">1,77%</div>
+    <div class="detail">Cliques / Impressoes geral</div>
+  </div>
+</div>
+
+<!-- ESTADOS -->
+<div class="section">
+  <div class="section-title"><span class="dot" style="background:var(--green)"></span> Engajamento por Estado (Nacional) — 2026</div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Estado</th>
+          <th class="right">Impressoes</th>
+          <th class="right">Cliques</th>
+          <th class="right">Investimento</th>
+          <th class="right">CPC</th>
+          <th class="right">CTR</th>
+          <th>Volume</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="rank">1</td>
+          <td class="region-name">Sao Paulo</td>
+          <td class="right">14.910.086</td>
+          <td class="right">267.050</td>
+          <td class="right">R$ 58.754</td>
+          <td class="right">R$ 0,22</td>
+          <td class="right"><span class="ctr-badge ctr-high">1,79%</span></td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-fill green" style="width:100%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="rank">2</td>
+          <td class="region-name">Minas Gerais</td>
+          <td class="right">40.529</td>
+          <td class="right">439</td>
+          <td class="right">R$ 113</td>
+          <td class="right">R$ 0,26</td>
+          <td class="right"><span class="ctr-badge ctr-high">1,08%</span></td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-fill green" style="width:2.5%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="rank">3</td>
+          <td class="region-name">Bahia</td>
+          <td class="right">25.105</td>
+          <td class="right">8</td>
+          <td class="right">R$ 32</td>
+          <td class="right">R$ 4,04</td>
+          <td class="right"><span class="ctr-badge ctr-low">0,03%</span></td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-fill green" style="width:2%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="rank">4</td>
+          <td class="region-name">Parana</td>
+          <td class="right">24.016</td>
+          <td class="right">328</td>
+          <td class="right">R$ 77</td>
+          <td class="right">R$ 0,24</td>
+          <td class="right"><span class="ctr-badge ctr-high">1,37%</span></td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-fill green" style="width:1.9%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="rank">5</td>
+          <td class="region-name">Ceara</td>
+          <td class="right">22.814</td>
+          <td class="right">10</td>
+          <td class="right">R$ 29</td>
+          <td class="right">R$ 2,90</td>
+          <td class="right"><span class="ctr-badge ctr-low">0,04%</span></td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-fill blue" style="width:1.8%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="rank">6</td>
+          <td class="region-name">Maranhao</td>
+          <td class="right">18.644</td>
+          <td class="right">5</td>
+          <td class="right">R$ 24</td>
+          <td class="right">R$ 4,84</td>
+          <td class="right"><span class="ctr-badge ctr-low">0,03%</span></td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-fill blue" style="width:1.5%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="rank">7</td>
+          <td class="region-name">Pernambuco</td>
+          <td class="right">17.634</td>
+          <td class="right">6</td>
+          <td class="right">R$ 22</td>
+          <td class="right">R$ 3,69</td>
+          <td class="right"><span class="ctr-badge ctr-low">0,03%</span></td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-fill blue" style="width:1.4%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="rank">8</td>
+          <td class="region-name">Para</td>
+          <td class="right">14.998</td>
+          <td class="right">7</td>
+          <td class="right">R$ 19</td>
+          <td class="right">R$ 2,69</td>
+          <td class="right"><span class="ctr-badge ctr-low">0,05%</span></td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-fill blue" style="width:1.2%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="rank">9</td>
+          <td class="region-name">Rio de Janeiro</td>
+          <td class="right">11.605</td>
+          <td class="right">223</td>
+          <td class="right">R$ 45</td>
+          <td class="right">R$ 0,20</td>
+          <td class="right"><span class="ctr-badge ctr-high">1,92%</span></td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-fill blue" style="width:1%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="rank">10</td>
+          <td class="region-name">Paraiba</td>
+          <td class="right">10.124</td>
+          <td class="right">9</td>
+          <td class="right">R$ 12</td>
+          <td class="right">R$ 1,38</td>
+          <td class="right"><span class="ctr-badge ctr-low">0,09%</span></td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-fill blue" style="width:0.8%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="rank">11</td>
+          <td class="region-name">Piaui</td>
+          <td class="right">8.794</td>
+          <td class="right">4</td>
+          <td class="right">R$ 11</td>
+          <td class="right">R$ 2,87</td>
+          <td class="right"><span class="ctr-badge ctr-low">0,05%</span></td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-fill purple" style="width:0.7%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="rank">12</td>
+          <td class="region-name">Rio Grande do Norte</td>
+          <td class="right">7.938</td>
+          <td class="right">7</td>
+          <td class="right">R$ 10</td>
+          <td class="right">R$ 1,48</td>
+          <td class="right"><span class="ctr-badge ctr-low">0,09%</span></td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-fill purple" style="width:0.6%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="rank">13</td>
+          <td class="region-name">Alagoas</td>
+          <td class="right">6.924</td>
+          <td class="right">4</td>
+          <td class="right">R$ 9</td>
+          <td class="right">R$ 2,23</td>
+          <td class="right"><span class="ctr-badge ctr-low">0,06%</span></td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-fill purple" style="width:0.5%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="rank">14</td>
+          <td class="region-name">Sergipe</td>
+          <td class="right">5.678</td>
+          <td class="right">2</td>
+          <td class="right">R$ 7</td>
+          <td class="right">R$ 3,63</td>
+          <td class="right"><span class="ctr-badge ctr-low">0,04%</span></td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-fill purple" style="width:0.5%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="rank">15</td>
+          <td class="region-name">Rio Grande do Sul</td>
+          <td class="right">5.651</td>
+          <td class="right">12</td>
+          <td class="right">R$ 7</td>
+          <td class="right">R$ 0,58</td>
+          <td class="right"><span class="ctr-badge ctr-mid">0,21%</span></td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-fill purple" style="width:0.5%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="rank">16</td>
+          <td class="region-name">Goias</td>
+          <td class="right">5.211</td>
+          <td class="right">5</td>
+          <td class="right">R$ 6</td>
+          <td class="right">R$ 1,30</td>
+          <td class="right"><span class="ctr-badge ctr-low">0,10%</span></td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-fill purple" style="width:0.4%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="rank">17</td>
+          <td class="region-name">Amazonas</td>
+          <td class="right">4.892</td>
+          <td class="right">4</td>
+          <td class="right">R$ 6</td>
+          <td class="right">R$ 1,52</td>
+          <td class="right"><span class="ctr-badge ctr-low">0,08%</span></td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-fill purple" style="width:0.4%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="rank">18</td>
+          <td class="region-name">Mato Grosso</td>
+          <td class="right">3.474</td>
+          <td class="right">2</td>
+          <td class="right">R$ 5</td>
+          <td class="right">R$ 2,27</td>
+          <td class="right"><span class="ctr-badge ctr-low">0,06%</span></td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-fill purple" style="width:0.3%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="rank">19</td>
+          <td class="region-name">Mato Grosso do Sul</td>
+          <td class="right">3.097</td>
+          <td class="right">46</td>
+          <td class="right">R$ 7</td>
+          <td class="right">R$ 0,15</td>
+          <td class="right"><span class="ctr-badge ctr-high">1,49%</span></td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-fill purple" style="width:0.3%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="rank">20</td>
+          <td class="region-name">Tocantins</td>
+          <td class="right">2.738</td>
+          <td class="right">1</td>
+          <td class="right">R$ 3</td>
+          <td class="right">R$ 3,39</td>
+          <td class="right"><span class="ctr-badge ctr-low">0,04%</span></td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-fill purple" style="width:0.3%"></div></div></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- MACRO REGIOES SP -->
+<div class="section">
+  <div class="section-title"><span class="dot" style="background:var(--blue)"></span> Macro Regioes de SP (Clusters Estrategicos) — 2026</div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Macro Regiao</th>
+          <th class="right">Impressoes</th>
+          <th class="right">Alcance</th>
+          <th class="right">Cliques</th>
+          <th class="right">Investimento</th>
+          <th class="right">CPC</th>
+          <th class="right">CTR</th>
+          <th>Volume</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="rank">1</td>
+          <td class="region-name">C2 - Cinturao Metropolitano</td>
+          <td class="right">473.984</td>
+          <td class="right">336.594</td>
+          <td class="right">4.451</td>
+          <td class="right">R$ 1.616</td>
+          <td class="right">R$ 0,36</td>
+          <td class="right"><span class="ctr-badge ctr-low">0,94%</span></td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-fill blue" style="width:100%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="rank">2</td>
+          <td class="region-name">C4 - Vale / Litoral</td>
+          <td class="right">447.991</td>
+          <td class="right">247.130</td>
+          <td class="right">4.245</td>
+          <td class="right">R$ 1.803</td>
+          <td class="right">R$ 0,42</td>
+          <td class="right"><span class="ctr-badge ctr-low">0,95%</span></td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-fill blue" style="width:95%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="rank">3</td>
+          <td class="region-name">C1 - Capital SP</td>
+          <td class="right">423.513</td>
+          <td class="right">318.055</td>
+          <td class="right">3.901</td>
+          <td class="right">R$ 1.552</td>
+          <td class="right">R$ 0,40</td>
+          <td class="right"><span class="ctr-badge ctr-low">0,92%</span></td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-fill blue" style="width:89%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="rank">4</td>
+          <td class="region-name">C7 - Oeste Paulista</td>
+          <td class="right">372.633</td>
+          <td class="right">195.054</td>
+          <td class="right">4.027</td>
+          <td class="right">R$ 1.248</td>
+          <td class="right">R$ 0,31</td>
+          <td class="right"><span class="ctr-badge ctr-mid">1,08%</span></td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-fill blue" style="width:79%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="rank">5</td>
+          <td class="region-name">C3 - Eixo Desenvolvimento</td>
+          <td class="right">268.539</td>
+          <td class="right">190.245</td>
+          <td class="right">3.032</td>
+          <td class="right">R$ 841</td>
+          <td class="right">R$ 0,28</td>
+          <td class="right"><span class="ctr-badge ctr-mid">1,13%</span></td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-fill blue" style="width:57%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="rank">6</td>
+          <td class="region-name">C6 - Interior Norte / Cafe</td>
+          <td class="right">237.758</td>
+          <td class="right">143.001</td>
+          <td class="right">2.702</td>
+          <td class="right">R$ 773</td>
+          <td class="right">R$ 0,29</td>
+          <td class="right"><span class="ctr-badge ctr-mid">1,14%</span></td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-fill blue" style="width:50%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="rank">7</td>
+          <td class="region-name">C5 - Interior Noroeste</td>
+          <td class="right">225.772</td>
+          <td class="right">127.635</td>
+          <td class="right">3.507</td>
+          <td class="right">R$ 762</td>
+          <td class="right">R$ 0,22</td>
+          <td class="right"><span class="ctr-badge ctr-high">1,55%</span></td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-fill blue" style="width:48%"></div></div></td>
+        </tr>
+        <tr class="total-row">
+          <td></td>
+          <td>TOTAL SP (7 Macro Regioes)</td>
+          <td class="right">2.450.190</td>
+          <td class="right">1.557.714</td>
+          <td class="right">25.865</td>
+          <td class="right">R$ 8.596</td>
+          <td class="right">R$ 0,33</td>
+          <td class="right"><span class="ctr-badge ctr-mid">1,06%</span></td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- CLUSTERS SP -->
+<div class="section">
+  <div class="section-title"><span class="dot" style="background:var(--purple)"></span> Clusters por Cidade/Regiao de SP (CL01-CL30) — 2026</div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Cluster</th>
+          <th class="right">Impressoes</th>
+          <th class="right">Alcance</th>
+          <th class="right">Cliques</th>
+          <th class="right">Investimento</th>
+          <th class="right">CTR</th>
+          <th>Volume</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="rank">1</td>
+          <td class="region-name">CL03 - Jovem Universitario</td>
+          <td class="right">132.877</td>
+          <td class="right">112.720</td>
+          <td class="right">301</td>
+          <td class="right">R$ 217</td>
+          <td class="right"><span class="ctr-badge ctr-mid">0,23%</span></td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-fill purple" style="width:100%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="rank">2</td>
+          <td class="region-name">CL23 - Dracena</td>
+          <td class="right">131.720</td>
+          <td class="right">51.482</td>
+          <td class="right">662</td>
+          <td class="right">R$ 402</td>
+          <td class="right"><span class="ctr-badge ctr-high">0,50%</span></td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-fill purple" style="width:99%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="rank">3</td>
+          <td class="region-name">CL08 - Guarulhos</td>
+          <td class="right">122.230</td>
+          <td class="right">74.435</td>
+          <td class="right">250</td>
+          <td class="right">R$ 214</td>
+          <td class="right"><span class="ctr-badge ctr-mid">0,20%</span></td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-fill purple" style="width:92%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="rank">4</td>
+          <td class="region-name">CL30 - Vale do Ribeira</td>
+          <td class="right">107.318</td>
+          <td class="right">48.404</td>
+          <td class="right">320</td>
+          <td class="right">R$ 345</td>
+          <td class="right"><span class="ctr-badge ctr-mid">0,30%</span></td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-fill purple" style="width:81%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="rank">5</td>
+          <td class="region-name">CL28 - Baixada Santista</td>
+          <td class="right">105.971</td>
+          <td class="right">58.014</td>
+          <td class="right">164</td>
+          <td class="right">R$ 212</td>
+          <td class="right"><span class="ctr-badge ctr-low">0,15%</span></td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-fill purple" style="width:80%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="rank">6</td>
+          <td class="region-name">CL07 - ABC Paulista</td>
+          <td class="right">61.012</td>
+          <td class="right">43.048</td>
+          <td class="right">72</td>
+          <td class="right">R$ 116</td>
+          <td class="right"><span class="ctr-badge ctr-low">0,12%</span></td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-fill purple" style="width:46%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="rank">7</td>
+          <td class="region-name">CL02 - Corporativo</td>
+          <td class="right">60.736</td>
+          <td class="right">53.337</td>
+          <td class="right">41</td>
+          <td class="right">R$ 113</td>
+          <td class="right"><span class="ctr-badge ctr-low">0,07%</span></td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-fill purple" style="width:46%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="rank">8</td>
+          <td class="region-name">CL01 - Alto Padrao</td>
+          <td class="right">59.317</td>
+          <td class="right">53.014</td>
+          <td class="right">64</td>
+          <td class="right">R$ 110</td>
+          <td class="right"><span class="ctr-badge ctr-low">0,11%</span></td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-fill purple" style="width:45%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="rank">9</td>
+          <td class="region-name">CL17 - Ribeirao / Franca</td>
+          <td class="right">58.480</td>
+          <td class="right">42.613</td>
+          <td class="right">93</td>
+          <td class="right">R$ 115</td>
+          <td class="right"><span class="ctr-badge ctr-low">0,16%</span></td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-fill purple" style="width:44%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="rank">10</td>
+          <td class="region-name">CL09 - Osasco</td>
+          <td class="right">56.129</td>
+          <td class="right">37.429</td>
+          <td class="right">62</td>
+          <td class="right">R$ 116</td>
+          <td class="right"><span class="ctr-badge ctr-low">0,11%</span></td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-fill purple" style="width:42%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="rank">11</td>
+          <td class="region-name">CL13 - Jundiai</td>
+          <td class="right">54.013</td>
+          <td class="right">35.076</td>
+          <td class="right">91</td>
+          <td class="right">R$ 115</td>
+          <td class="right"><span class="ctr-badge ctr-low">0,17%</span></td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-fill purple" style="width:41%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="rank">12</td>
+          <td class="region-name">CL11 - Sul Metropolitano</td>
+          <td class="right">52.353</td>
+          <td class="right">34.026</td>
+          <td class="right">69</td>
+          <td class="right">R$ 115</td>
+          <td class="right"><span class="ctr-badge ctr-low">0,13%</span></td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-fill purple" style="width:39%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="rank">13</td>
+          <td class="region-name">CL24 - Itapeva</td>
+          <td class="right">51.176</td>
+          <td class="right">28.376</td>
+          <td class="right">103</td>
+          <td class="right">R$ 117</td>
+          <td class="right"><span class="ctr-badge ctr-mid">0,20%</span></td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-fill purple" style="width:39%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="rank">14</td>
+          <td class="region-name">CL22 - Presidente Prudente</td>
+          <td class="right">50.966</td>
+          <td class="right">32.659</td>
+          <td class="right">109</td>
+          <td class="right">R$ 117</td>
+          <td class="right"><span class="ctr-badge ctr-mid">0,21%</span></td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-fill purple" style="width:38%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="rank">15</td>
+          <td class="region-name">CL25 - Alto Vale</td>
+          <td class="right">44.927</td>
+          <td class="right">34.303</td>
+          <td class="right">86</td>
+          <td class="right">R$ 74</td>
+          <td class="right"><span class="ctr-badge ctr-mid">0,19%</span></td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-fill purple" style="width:34%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="rank">16</td>
+          <td class="region-name">CL04 - Popular Leste</td>
+          <td class="right">44.505</td>
+          <td class="right">40.160</td>
+          <td class="right">67</td>
+          <td class="right">R$ 73</td>
+          <td class="right"><span class="ctr-badge ctr-low">0,15%</span></td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-fill purple" style="width:34%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="rank">17</td>
+          <td class="region-name">CL16 - Araraquara</td>
+          <td class="right">44.016</td>
+          <td class="right">30.910</td>
+          <td class="right">84</td>
+          <td class="right">R$ 74</td>
+          <td class="right"><span class="ctr-badge ctr-mid">0,19%</span></td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-fill purple" style="width:33%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="rank">18</td>
+          <td class="region-name">CL18 - Bauru / Jau</td>
+          <td class="right">41.622</td>
+          <td class="right">29.635</td>
+          <td class="right">93</td>
+          <td class="right">R$ 75</td>
+          <td class="right"><span class="ctr-badge ctr-mid">0,22%</span></td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-fill purple" style="width:31%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="rank">19</td>
+          <td class="region-name">CL05 - Popular Norte/Sul</td>
+          <td class="right">41.531</td>
+          <td class="right">37.293</td>
+          <td class="right">35</td>
+          <td class="right">R$ 71</td>
+          <td class="right"><span class="ctr-badge ctr-low">0,08%</span></td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-fill purple" style="width:31%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="rank">20</td>
+          <td class="region-name">CL20 - Marilia / Assis</td>
+          <td class="right">40.455</td>
+          <td class="right">27.860</td>
+          <td class="right">88</td>
+          <td class="right">R$ 74</td>
+          <td class="right"><span class="ctr-badge ctr-mid">0,22%</span></td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-fill purple" style="width:30%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="rank">21</td>
+          <td class="region-name">CL10 - Leste Expandido</td>
+          <td class="right">39.505</td>
+          <td class="right">25.886</td>
+          <td class="right">91</td>
+          <td class="right">R$ 74</td>
+          <td class="right"><span class="ctr-badge ctr-mid">0,23%</span></td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-fill purple" style="width:30%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="rank">22</td>
+          <td class="region-name">CL06 - Gastro / Etnico</td>
+          <td class="right">36.532</td>
+          <td class="right">32.661</td>
+          <td class="right">87</td>
+          <td class="right">R$ 74</td>
+          <td class="right"><span class="ctr-badge ctr-mid">0,24%</span></td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-fill purple" style="width:28%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="rank">23</td>
+          <td class="region-name">CL14 - Sorocaba</td>
+          <td class="right">34.899</td>
+          <td class="right">28.224</td>
+          <td class="right">45</td>
+          <td class="right">R$ 75</td>
+          <td class="right"><span class="ctr-badge ctr-low">0,13%</span></td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-fill purple" style="width:26%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="rank">24</td>
+          <td class="region-name">CL15 - Piracicaba</td>
+          <td class="right">33.812</td>
+          <td class="right">26.249</td>
+          <td class="right">43</td>
+          <td class="right">R$ 72</td>
+          <td class="right"><span class="ctr-badge ctr-low">0,13%</span></td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-fill purple" style="width:25%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="rank">25</td>
+          <td class="region-name">CL27 - Aparecida</td>
+          <td class="right">33.377</td>
+          <td class="right">15.879</td>
+          <td class="right">204</td>
+          <td class="right">R$ 118</td>
+          <td class="right"><span class="ctr-badge ctr-high">0,61%</span></td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-fill purple" style="width:25%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="rank">26</td>
+          <td class="region-name">CL19 - Rio Preto</td>
+          <td class="right">32.499</td>
+          <td class="right">26.022</td>
+          <td class="right">87</td>
+          <td class="right">R$ 77</td>
+          <td class="right"><span class="ctr-badge ctr-mid">0,27%</span></td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-fill purple" style="width:24%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="rank">27</td>
+          <td class="region-name">CL29 - Litoral Norte</td>
+          <td class="right">31.471</td>
+          <td class="right">22.972</td>
+          <td class="right">72</td>
+          <td class="right">R$ 73</td>
+          <td class="right"><span class="ctr-badge ctr-mid">0,23%</span></td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-fill purple" style="width:24%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="rank">28</td>
+          <td class="region-name">CL12 - Campinas</td>
+          <td class="right">23.437</td>
+          <td class="right">20.349</td>
+          <td class="right">55</td>
+          <td class="right">R$ 33</td>
+          <td class="right"><span class="ctr-badge ctr-mid">0,23%</span></td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-fill purple" style="width:18%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="rank">29</td>
+          <td class="region-name">CL26 - Medio Vale</td>
+          <td class="right">19.803</td>
+          <td class="right">16.101</td>
+          <td class="right">24</td>
+          <td class="right">R$ 33</td>
+          <td class="right"><span class="ctr-badge ctr-low">0,12%</span></td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-fill purple" style="width:15%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="rank">30</td>
+          <td class="region-name">CL21 - Aracatuba</td>
+          <td class="right">18.984</td>
+          <td class="right">15.041</td>
+          <td class="right">35</td>
+          <td class="right">R$ 32</td>
+          <td class="right"><span class="ctr-badge ctr-mid">0,18%</span></td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-fill purple" style="width:14%"></div></div></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- TOP CTR CHART -->
+<div class="chart-grid">
+  <div class="chart-card">
+    <h3>Top 10 Clusters por CTR (Taxa de Engajamento) — 2026</h3>
+    <div class="h-bar">
+      <div class="h-bar-label">CL27 Aparecida</div>
+      <div class="h-bar-track"><div class="h-bar-fill" style="width:100%;background:linear-gradient(90deg,var(--green),var(--green2))"><span class="h-bar-val">0,61%</span></div></div>
+    </div>
+    <div class="h-bar">
+      <div class="h-bar-label">CL23 Dracena</div>
+      <div class="h-bar-track"><div class="h-bar-fill" style="width:82%;background:linear-gradient(90deg,var(--green),var(--green2))"><span class="h-bar-val">0,50%</span></div></div>
+    </div>
+    <div class="h-bar">
+      <div class="h-bar-label">CL30 Vale Ribeira</div>
+      <div class="h-bar-track"><div class="h-bar-fill" style="width:49%;background:linear-gradient(90deg,var(--blue),var(--blue2))"><span class="h-bar-val">0,30%</span></div></div>
+    </div>
+    <div class="h-bar">
+      <div class="h-bar-label">CL19 Rio Preto</div>
+      <div class="h-bar-track"><div class="h-bar-fill" style="width:44%;background:linear-gradient(90deg,var(--blue),var(--blue2))"><span class="h-bar-val">0,27%</span></div></div>
+    </div>
+    <div class="h-bar">
+      <div class="h-bar-label">CL06 Gastro/Etnico</div>
+      <div class="h-bar-track"><div class="h-bar-fill" style="width:39%;background:linear-gradient(90deg,var(--blue),var(--blue2))"><span class="h-bar-val">0,24%</span></div></div>
+    </div>
+    <div class="h-bar">
+      <div class="h-bar-label">CL03 Jovem Univ.</div>
+      <div class="h-bar-track"><div class="h-bar-fill" style="width:38%;background:linear-gradient(90deg,var(--blue),var(--blue2))"><span class="h-bar-val">0,23%</span></div></div>
+    </div>
+    <div class="h-bar">
+      <div class="h-bar-label">CL10 Leste Expand.</div>
+      <div class="h-bar-track"><div class="h-bar-fill" style="width:38%;background:linear-gradient(90deg,var(--blue),var(--blue2))"><span class="h-bar-val">0,23%</span></div></div>
+    </div>
+    <div class="h-bar">
+      <div class="h-bar-label">CL18 Bauru/Jau</div>
+      <div class="h-bar-track"><div class="h-bar-fill" style="width:36%;background:linear-gradient(90deg,var(--blue),var(--blue2))"><span class="h-bar-val">0,22%</span></div></div>
+    </div>
+    <div class="h-bar">
+      <div class="h-bar-label">CL22 Prudente</div>
+      <div class="h-bar-track"><div class="h-bar-fill" style="width:34%;background:linear-gradient(90deg,var(--blue),var(--blue2))"><span class="h-bar-val">0,21%</span></div></div>
+    </div>
+    <div class="h-bar">
+      <div class="h-bar-label">CL08 Guarulhos</div>
+      <div class="h-bar-track"><div class="h-bar-fill" style="width:33%;background:linear-gradient(90deg,var(--purple),var(--purple2))"><span class="h-bar-val">0,20%</span></div></div>
+    </div>
+  </div>
+
+  <div class="chart-card">
+    <h3>Top 10 Estados por CTR (fora de SP) — 2026</h3>
+    <div class="h-bar">
+      <div class="h-bar-label">Rio de Janeiro</div>
+      <div class="h-bar-track"><div class="h-bar-fill" style="width:100%;background:linear-gradient(90deg,var(--green),var(--green2))"><span class="h-bar-val">1,92%</span></div></div>
+      <div class="h-bar-ext">11,6K impr</div>
+    </div>
+    <div class="h-bar">
+      <div class="h-bar-label">Mato Grosso do Sul</div>
+      <div class="h-bar-track"><div class="h-bar-fill" style="width:78%;background:linear-gradient(90deg,var(--green),var(--green2))"><span class="h-bar-val">1,49%</span></div></div>
+      <div class="h-bar-ext">3,1K impr</div>
+    </div>
+    <div class="h-bar">
+      <div class="h-bar-label">Parana</div>
+      <div class="h-bar-track"><div class="h-bar-fill" style="width:71%;background:linear-gradient(90deg,var(--green),var(--green2))"><span class="h-bar-val">1,37%</span></div></div>
+      <div class="h-bar-ext">24K impr</div>
+    </div>
+    <div class="h-bar">
+      <div class="h-bar-label">Minas Gerais</div>
+      <div class="h-bar-track"><div class="h-bar-fill" style="width:56%;background:linear-gradient(90deg,var(--blue),var(--blue2))"><span class="h-bar-val">1,08%</span></div></div>
+      <div class="h-bar-ext">40,5K impr</div>
+    </div>
+    <div class="h-bar">
+      <div class="h-bar-label">Rio Grande do Sul</div>
+      <div class="h-bar-track"><div class="h-bar-fill" style="width:11%;background:linear-gradient(90deg,var(--blue),var(--blue2))"><span class="h-bar-val">0,21%</span></div></div>
+      <div class="h-bar-ext">5,7K impr</div>
+    </div>
+    <div class="h-bar">
+      <div class="h-bar-label">Acre</div>
+      <div class="h-bar-track"><div class="h-bar-fill" style="width:10%;background:linear-gradient(90deg,var(--purple),var(--purple2))"><span class="h-bar-val">0,19%</span></div></div>
+      <div class="h-bar-ext">2,1K impr</div>
+    </div>
+    <div class="h-bar">
+      <div class="h-bar-label">Roraima</div>
+      <div class="h-bar-track"><div class="h-bar-fill" style="width:7%;background:linear-gradient(90deg,var(--purple),var(--purple2))"><span class="h-bar-val">0,13%</span></div></div>
+      <div class="h-bar-ext">755 impr</div>
+    </div>
+    <div class="h-bar">
+      <div class="h-bar-label">Rondonia</div>
+      <div class="h-bar-track"><div class="h-bar-fill" style="width:7%;background:linear-gradient(90deg,var(--purple),var(--purple2))"><span class="h-bar-val">0,13%</span></div></div>
+      <div class="h-bar-ext">2,3K impr</div>
+    </div>
+    <div class="h-bar">
+      <div class="h-bar-label">Distrito Federal</div>
+      <div class="h-bar-track"><div class="h-bar-fill" style="width:6%;background:linear-gradient(90deg,var(--purple),var(--purple2))"><span class="h-bar-val">0,12%</span></div></div>
+      <div class="h-bar-ext">830 impr</div>
+    </div>
+    <div class="h-bar">
+      <div class="h-bar-label">Goias</div>
+      <div class="h-bar-track"><div class="h-bar-fill" style="width:5%;background:linear-gradient(90deg,var(--purple),var(--purple2))"><span class="h-bar-val">0,10%</span></div></div>
+      <div class="h-bar-ext">5,2K impr</div>
+    </div>
+  </div>
+</div>
+
+<!-- INSIGHTS -->
+<div class="insights">
+  <h3>Principais Insights — 2026</h3>
+
+  <div class="insight-item">
+    <div class="insight-icon green-bg">&#9650;</div>
+    <div class="insight-text">
+      <strong>Sao Paulo concentra 98,3% de todas as impressoes em 2026.</strong>
+      Com 14,91M de 15,16M impressoes totais, o foco geografico esta altamente direcionado ao estado-alvo. Os outros 26 estados somam apenas 252K impressoes, indicando campanha bem segmentada para deputado federal por SP.
+    </div>
+  </div>
+
+  <div class="insight-item">
+    <div class="insight-icon blue-bg">&#9733;</div>
+    <div class="insight-text">
+      <strong>Interior Noroeste (C5) permanece como cluster macro mais eficiente.</strong>
+      Com CTR de 1,55% e CPC de R$ 0,22 — o menor entre os 7 macro clusters — o Interior Noroeste entrega o melhor retorno por real investido. Recomenda-se escalar verba nesta regiao, especialmente diante do CTR mais baixo nos clusters C1 Capital (0,92%) e C2 Cinturao Metro (0,94%).
+    </div>
+  </div>
+
+  <div class="insight-item">
+    <div class="insight-icon purple-bg">&#9679;</div>
+    <div class="insight-text">
+      <strong>Dracena e Aparecida lideram engajamento local em SP.</strong>
+      CL27 Aparecida mantem o maior CTR (0,61%) entre todos os 30 clusters, seguido de CL23 Dracena (0,50%). Ambos sao regioes do interior com custo-beneficio favoravel para escalar investimento no segundo semestre.
+    </div>
+  </div>
+
+  <div class="insight-item">
+    <div class="insight-icon amber-bg">&#9888;</div>
+    <div class="insight-text">
+      <strong>Engajamento fora de SP caiu drasticamente em 2026.</strong>
+      No acumulado historico, estados como RJ (3,10%) e RS (3,04%) tinham CTR alto. Em 2026, RJ ainda lidera fora de SP com 1,92%, mas a maioria dos estados nordestinos tem CTR abaixo de 0,10%. A conta Pre-Campanha Estado 26 (67% do investimento) gera alcance em massa mas com baixo engajamento fora de SP.
+    </div>
+  </div>
+
+  <div class="insight-item">
+    <div class="insight-icon green-bg">&#10003;</div>
+    <div class="insight-text">
+      <strong>Pre-Campanha Estado 26 responde por 67% do investimento total em 2026</strong>
+      com R$ 40.089 gastos e 9,83M de impressoes. PR, MG e RJ sao os unicos estados fora de SP com CTR acima de 1% — considere criar conteudo adaptado para essas audiencias ou redirecionar verba para clusters de SP com melhor performance.
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  Relatorio gerado automaticamente a partir dos dados do Meta Ads API | Campanha David Soares 2026 | Periodo: Jan-Jun 2026 | 30/06/2026
+</div>
+
+</div>
+</body>
+</html>

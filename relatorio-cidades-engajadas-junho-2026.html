@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Relatório Junho 2026 — Cidades Engajadas | Piloto Automático</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0f1a;--bg2:#111827;--bg3:#1f2937;--bg4:#374151;
+  --green:#10b981;--green2:#34d399;--green-bg:rgba(16,185,129,.08);--green-bg2:rgba(16,185,129,.15);
+  --blue:#3b82f6;--blue2:#60a5fa;--blue-bg:rgba(59,130,246,.08);--blue-bg2:rgba(59,130,246,.15);
+  --purple:#8b5cf6;--purple2:#a78bfa;--purple-bg:rgba(139,92,246,.08);--purple-bg2:rgba(139,92,246,.15);
+  --amber:#f59e0b;--amber2:#fbbf24;--amber-bg:rgba(245,158,11,.08);--amber-bg2:rgba(245,158,11,.15);
+  --red:#ef4444;--red2:#f87171;--red-bg:rgba(239,68,68,.08);
+  --cyan:#06b6d4;--cyan2:#22d3ee;
+  --text:#e5e7eb;--text2:#9ca3af;--text3:#6b7280;
+  --brd:rgba(255,255,255,.06);--brd2:rgba(255,255,255,.1);
+}
+html,body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;line-height:1.6}
+.container{max-width:1400px;margin:0 auto;padding:24px 32px 64px}
+.top-bar{height:4px;background:linear-gradient(90deg,var(--green),var(--blue),var(--purple),var(--amber))}
+
+/* HEADER */
+.header{padding:36px 0 28px;border-bottom:1px solid var(--brd);margin-bottom:36px}
+.header h1{font-size:2rem;font-weight:900;letter-spacing:-.03em;background:linear-gradient(135deg,var(--green2),var(--blue2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.header .sub{font-size:.9rem;color:var(--text2);margin-top:6px}
+.header .date{font-size:.75rem;color:var(--text3);margin-top:10px;letter-spacing:.05em}
+.month-badge{display:inline-block;padding:5px 16px;background:linear-gradient(135deg,var(--green),var(--blue));border-radius:6px;font-size:.75rem;font-weight:800;color:#fff;margin-left:10px;vertical-align:middle;text-transform:uppercase;letter-spacing:.05em}
+.accounts{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.acc-tag{font-size:.68rem;padding:5px 12px;background:var(--bg3);border:1px solid var(--brd);border-radius:5px;color:var(--text2)}
+
+/* SECTION */
+.section{margin-bottom:44px}
+.section-header{margin-bottom:20px}
+.section-title{font-size:1.15rem;font-weight:800;display:flex;align-items:center;gap:10px}
+.section-title .dot{width:10px;height:10px;border-radius:50%}
+.section-desc{font-size:.78rem;color:var(--text3);margin-top:4px;max-width:700px}
+
+/* KPI GRID */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px}
+.kpi{background:var(--bg2);border:1px solid var(--brd);border-radius:10px;padding:22px}
+.kpi .label{font-size:.62rem;text-transform:uppercase;letter-spacing:.12em;color:var(--text3);margin-bottom:6px}
+.kpi .value{font-size:2rem;font-weight:900;line-height:1.1}
+.kpi .value.green{color:var(--green)}
+.kpi .value.blue{color:var(--blue)}
+.kpi .value.purple{color:var(--purple)}
+.kpi .value.amber{color:var(--amber)}
+.kpi .value.cyan{color:var(--cyan)}
+.kpi .detail{font-size:.72rem;color:var(--text3);margin-top:6px;line-height:1.4}
+.kpi-secondary{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:36px}
+.kpi-sm{background:var(--bg2);border:1px solid var(--brd);border-radius:8px;padding:16px;text-align:center}
+.kpi-sm .label{font-size:.58rem;text-transform:uppercase;letter-spacing:.1em;color:var(--text3);margin-bottom:4px}
+.kpi-sm .value{font-size:1.3rem;font-weight:800}
+
+/* CARDS */
+.card-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:16px}
+.card{background:var(--bg2);border:1px solid var(--brd);border-radius:10px;padding:20px}
+.card-title{font-size:.78rem;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.card-title .tag{font-size:.55rem;padding:2px 8px;border-radius:4px;font-weight:600;text-transform:uppercase;letter-spacing:.05em}
+.card-title .tag.green{background:var(--green-bg2);color:var(--green2)}
+.card-title .tag.blue{background:var(--blue-bg2);color:var(--blue2)}
+.card-title .tag.purple{background:var(--purple-bg2);color:var(--purple2)}
+.card-title .tag.amber{background:var(--amber-bg2);color:var(--amber2)}
+.card-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--brd)}
+.card-row:last-child{border-bottom:none}
+.card-row .k{font-size:.72rem;color:var(--text3)}
+.card-row .v{font-size:.78rem;font-weight:700}
+
+/* TABLE */
+.table-wrap{background:var(--bg2);border:1px solid var(--brd);border-radius:10px;overflow:hidden}
+table{width:100%;border-collapse:collapse}
+th{font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;color:var(--text3);padding:14px 16px;text-align:left;background:var(--bg3);border-bottom:1px solid var(--brd);white-space:nowrap}
+th.right,td.right{text-align:right}
+th.center,td.center{text-align:center}
+td{padding:12px 16px;font-size:.8rem;border-bottom:1px solid var(--brd)}
+tr:last-child td{border-bottom:none}
+tr:hover{background:rgba(255,255,255,.02)}
+.rank{font-weight:800;color:var(--text3);font-size:.72rem;width:32px}
+.region-name{font-weight:600}
+.bar-cell{width:180px}
+.bar-wrap{height:7px;background:rgba(255,255,255,.04);border-radius:4px;overflow:hidden}
+.bar-fill{height:100%;border-radius:4px}
+.bar-fill.green{background:linear-gradient(90deg,var(--green),var(--green2))}
+.bar-fill.blue{background:linear-gradient(90deg,var(--blue),var(--blue2))}
+.bar-fill.purple{background:linear-gradient(90deg,var(--purple),var(--purple2))}
+.bar-fill.amber{background:linear-gradient(90deg,var(--amber),var(--amber2))}
+.bar-fill.cyan{background:linear-gradient(90deg,var(--cyan),var(--cyan2))}
+.badge{display:inline-block;padding:3px 10px;border-radius:12px;font-size:.68rem;font-weight:700}
+.badge-green{background:rgba(16,185,129,.15);color:var(--green2)}
+.badge-blue{background:rgba(59,130,246,.15);color:var(--blue2)}
+.badge-amber{background:rgba(245,158,11,.15);color:var(--amber2)}
+.badge-red{background:rgba(239,68,68,.15);color:var(--red2)}
+.badge-purple{background:rgba(139,92,246,.15);color:var(--purple2)}
+.total-row td{font-weight:700;background:rgba(255,255,255,.03);border-top:2px solid var(--brd2)}
+
+/* PERF INDICATOR */
+.perf{display:inline-flex;align-items:center;gap:4px;font-size:.68rem;font-weight:600}
+.perf-dot{width:6px;height:6px;border-radius:50%}
+.perf-dot.excellent{background:var(--green)}
+.perf-dot.good{background:var(--blue)}
+.perf-dot.ok{background:var(--amber)}
+.perf-dot.low{background:var(--red)}
+
+/* CHART */
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:36px}
+.chart-card{background:var(--bg2);border:1px solid var(--brd);border-radius:10px;padding:22px}
+.chart-card h3{font-size:.82rem;font-weight:700;margin-bottom:4px;color:var(--text)}
+.chart-card .chart-desc{font-size:.68rem;color:var(--text3);margin-bottom:16px}
+.h-bar{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.h-bar-label{font-size:.7rem;color:var(--text2);min-width:160px;text-align:right;line-height:1.2}
+.h-bar-track{flex:1;height:22px;background:rgba(255,255,255,.03);border-radius:4px;overflow:hidden;position:relative}
+.h-bar-fill{height:100%;border-radius:4px;display:flex;align-items:center;padding-left:8px}
+.h-bar-val{font-size:.62rem;font-weight:700;color:rgba(255,255,255,.95);white-space:nowrap}
+.h-bar-ext{font-size:.65rem;color:var(--text3);min-width:80px;text-align:right}
+
+/* INSIGHTS */
+.insights{background:var(--bg2);border:1px solid var(--brd);border-radius:10px;padding:28px}
+.insights h3{font-size:1rem;font-weight:800;margin-bottom:20px}
+.insight-item{display:flex;gap:14px;margin-bottom:14px;padding:14px;background:var(--bg3);border-radius:8px}
+.insight-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+.insight-icon.green-bg{background:var(--green-bg2)}
+.insight-icon.amber-bg{background:var(--amber-bg2)}
+.insight-icon.blue-bg{background:var(--blue-bg2)}
+.insight-icon.purple-bg{background:var(--purple-bg2)}
+.insight-icon.red-bg{background:var(--red-bg)}
+.insight-text{font-size:.8rem;color:var(--text2);line-height:1.6}
+.insight-text strong{color:var(--text);font-weight:700}
+
+/* LEGEND */
+.legend{display:flex;gap:20px;margin-top:12px;margin-bottom:16px;flex-wrap:wrap}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:.68rem;color:var(--text3)}
+.legend-dot{width:8px;height:8px;border-radius:50%}
+
+/* FOOTER */
+.footer{margin-top:48px;padding-top:24px;border-top:1px solid var(--brd);font-size:.65rem;color:var(--text3);text-align:center;line-height:1.6}
+
+@media(max-width:900px){
+  .kpi-grid,.card-grid{grid-template-columns:repeat(2,1fr)}
+  .chart-grid{grid-template-columns:1fr}
+  .kpi-secondary{grid-template-columns:repeat(3,1fr)}
+  .container{padding:16px}
+}
+@media(max-width:600px){
+  .kpi-grid,.kpi-secondary{grid-template-columns:1fr}
+  .card-grid{grid-template-columns:1fr}
+  .bar-cell{display:none}
+  .h-bar-label{min-width:100px}
+}
+@media print{
+  body{background:#fff;color:#1a1a1a}
+  .top-bar{display:none}
+  .container{padding:10mm}
+}
+</style>
+</head>
+<body>
+<div class="top-bar"></div>
+<div class="container">
+
+<!-- ====== HEADER ====== -->
+<div class="header">
+  <h1>Relatorio de Cidades Engajadas <span class="month-badge">Junho 2026</span></h1>
+  <div class="sub">Desempenho completo das campanhas do Piloto Automatico — David Soares Deputado Federal SP</div>
+  <div class="date">Gerado em 30/06/2026 | Periodo: 01/06/2026 - 30/06/2026 (1 mes)</div>
+  <div class="accounts">
+    <span class="acc-tag">Campanha Estado 26</span>
+    <span class="acc-tag">Pre - Campanha Estado 26</span>
+    <span class="acc-tag">Campanha Capital 26</span>
+    <span class="acc-tag">Pre - Campanha Capital 26</span>
+  </div>
+</div>
+
+<!-- ====== 1. RESUMO EXECUTIVO ====== -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-title"><span class="dot" style="background:var(--green)"></span> Resumo Executivo</div>
+    <div class="section-desc">Visao geral do desempenho de todas as 4 contas de anuncio combinadas no mes de junho de 2026.</div>
+  </div>
+
+  <div class="kpi-grid">
+    <div class="kpi">
+      <div class="label">Pessoas Alcancadas</div>
+      <div class="value green">4,14M</div>
+      <div class="detail">Vezes que os anuncios foram exibidos para o publico em todo o Brasil</div>
+    </div>
+    <div class="kpi">
+      <div class="label">Interacoes (Cliques)</div>
+      <div class="value blue">87.061</div>
+      <div class="detail">Pessoas que clicaram, curtiram ou interagiram com os anuncios</div>
+    </div>
+    <div class="kpi">
+      <div class="label">Investimento Total</div>
+      <div class="value purple">R$ 15.762</div>
+      <div class="detail">Valor gasto nas 4 contas durante o mes de junho</div>
+    </div>
+    <div class="kpi">
+      <div class="label">Taxa de Engajamento (CTR)</div>
+      <div class="value amber">2,10%</div>
+      <div class="detail">A cada 100 pessoas que viram o anuncio, ~2 interagiram</div>
+    </div>
+  </div>
+
+  <div class="kpi-secondary">
+    <div class="kpi-sm">
+      <div class="label">Custo por Clique (CPC)</div>
+      <div class="value blue">R$ 0,18</div>
+    </div>
+    <div class="kpi-sm">
+      <div class="label">Custo por 1.000 Exibicoes (CPM)</div>
+      <div class="value purple">R$ 3,80</div>
+    </div>
+    <div class="kpi-sm">
+      <div class="label">Total de Campanhas Ativas</div>
+      <div class="value green">21</div>
+    </div>
+  </div>
+</div>
+
+<!-- ====== 2. DESEMPENHO POR CONTA ====== -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-title"><span class="dot" style="background:var(--blue)"></span> Desempenho por Conta de Anuncio</div>
+    <div class="section-desc">Como cada conta contribuiu para os resultados de junho. As contas "Pre-Campanha" focam em alcance e reconhecimento, enquanto as "Campanha" focam em engajamento direto.</div>
+  </div>
+
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-title">Pre - Campanha Estado 26 <span class="tag green">Melhor CTR</span></div>
+      <div class="card-row"><span class="k">Impressoes</span><span class="v">1.434.497</span></div>
+      <div class="card-row"><span class="k">Cliques</span><span class="v">55.475</span></div>
+      <div class="card-row"><span class="k">Investimento</span><span class="v">R$ 6.318</span></div>
+      <div class="card-row"><span class="k">CTR</span><span class="v" style="color:var(--green)">3,87%</span></div>
+      <div class="card-row"><span class="k">CPC</span><span class="v" style="color:var(--green)">R$ 0,11</span></div>
+      <div class="card-row"><span class="k">% do Investimento</span><span class="v">40%</span></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Campanha Estado 26 <span class="tag blue">Alto Engajamento</span></div>
+      <div class="card-row"><span class="k">Impressoes</span><span class="v">780.991</span></div>
+      <div class="card-row"><span class="k">Cliques</span><span class="v">22.729</span></div>
+      <div class="card-row"><span class="k">Investimento</span><span class="v">R$ 4.313</span></div>
+      <div class="card-row"><span class="k">CTR</span><span class="v" style="color:var(--green)">2,91%</span></div>
+      <div class="card-row"><span class="k">CPC</span><span class="v" style="color:var(--blue)">R$ 0,19</span></div>
+      <div class="card-row"><span class="k">% do Investimento</span><span class="v">27%</span></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Pre - Campanha Capital 26 <span class="tag purple">Piloto Automatico</span></div>
+      <div class="card-row"><span class="k">Impressoes</span><span class="v">728.922</span></div>
+      <div class="card-row"><span class="k">Cliques</span><span class="v">6.858</span></div>
+      <div class="card-row"><span class="k">Investimento</span><span class="v">R$ 3.377</span></div>
+      <div class="card-row"><span class="k">CTR</span><span class="v" style="color:var(--amber)">0,94%</span></div>
+      <div class="card-row"><span class="k">CPC</span><span class="v" style="color:var(--amber)">R$ 0,49</span></div>
+      <div class="card-row"><span class="k">% do Investimento</span><span class="v">21%</span></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Campanha Capital 26 <span class="tag amber">Alcance</span></div>
+      <div class="card-row"><span class="k">Impressoes</span><span class="v">1.198.917</span></div>
+      <div class="card-row"><span class="k">Cliques</span><span class="v">1.999</span></div>
+      <div class="card-row"><span class="k">Investimento</span><span class="v">R$ 1.754</span></div>
+      <div class="card-row"><span class="k">CTR</span><span class="v" style="color:var(--red)">0,17%</span></div>
+      <div class="card-row"><span class="k">CPC</span><span class="v" style="color:var(--red)">R$ 0,88</span></div>
+      <div class="card-row"><span class="k">% do Investimento</span><span class="v">11%</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ====== 3. COBERTURA GEOGRÁFICA ====== -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-title"><span class="dot" style="background:var(--green)"></span> Cobertura Geografica — Junho 2026</div>
+    <div class="section-desc">Em junho, a campanha ficou altamente concentrada em Sao Paulo (99,5% das impressoes). Apenas 4 outros estados receberam anuncios, todos com volume residual.</div>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Estado</th>
+          <th class="right">Impressoes</th>
+          <th class="right">Cliques</th>
+          <th class="right">Investimento</th>
+          <th class="right">CPC</th>
+          <th class="right">CTR</th>
+          <th>Desempenho</th>
+          <th>Volume</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="rank">1</td>
+          <td class="region-name">Sao Paulo</td>
+          <td class="right">4.121.555</td>
+          <td class="right">86.666</td>
+          <td class="right">R$ 15.688</td>
+          <td class="right">R$ 0,18</td>
+          <td class="right"><span class="badge badge-green">2,10%</span></td>
+          <td><span class="perf"><span class="perf-dot excellent"></span> Excelente</span></td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-fill green" style="width:100%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="rank">2</td>
+          <td class="region-name">Minas Gerais</td>
+          <td class="right">12.484</td>
+          <td class="right">150</td>
+          <td class="right">R$ 34</td>
+          <td class="right">R$ 0,23</td>
+          <td class="right"><span class="badge badge-green">1,20%</span></td>
+          <td><span class="perf"><span class="perf-dot good"></span> Bom</span></td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-fill blue" style="width:3%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="rank">3</td>
+          <td class="region-name">Parana</td>
+          <td class="right">6.823</td>
+          <td class="right">168</td>
+          <td class="right">R$ 29</td>
+          <td class="right">R$ 0,17</td>
+          <td class="right"><span class="badge badge-green">2,46%</span></td>
+          <td><span class="perf"><span class="perf-dot excellent"></span> Excelente</span></td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-fill blue" style="width:2%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="rank">4</td>
+          <td class="region-name">Rio de Janeiro</td>
+          <td class="right">1.975</td>
+          <td class="right">65</td>
+          <td class="right">R$ 9</td>
+          <td class="right">R$ 0,13</td>
+          <td class="right"><span class="badge badge-green">3,29%</span></td>
+          <td><span class="perf"><span class="perf-dot excellent"></span> Excelente</span></td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-fill purple" style="width:1%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="rank">5</td>
+          <td class="region-name">Mato Grosso do Sul</td>
+          <td class="right">481</td>
+          <td class="right">11</td>
+          <td class="right">R$ 2</td>
+          <td class="right">R$ 0,15</td>
+          <td class="right"><span class="badge badge-green">2,29%</span></td>
+          <td><span class="perf"><span class="perf-dot excellent"></span> Excelente</span></td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-fill purple" style="width:0.5%"></div></div></td>
+        </tr>
+        <tr class="total-row">
+          <td></td>
+          <td>TOTAL GERAL</td>
+          <td class="right">4.143.327</td>
+          <td class="right">87.061</td>
+          <td class="right">R$ 15.762</td>
+          <td class="right">R$ 0,18</td>
+          <td class="right"><span class="badge badge-green">2,10%</span></td>
+          <td></td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ====== 4. CAMPANHAS GEOGRÁFICAS ====== -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-title"><span class="dot" style="background:var(--blue)"></span> Campanhas Geograficas — Performance em Junho</div>
+    <div class="section-desc">Campanhas segmentadas por regiao dentro de Sao Paulo. Divididas entre campanhas de engajamento (buscam interacao) e campanhas de alcance (buscam exibir para o maximo de pessoas).</div>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div> Engajamento (busca cliques e interacoes)</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--blue)"></div> Alcance (busca exibir para mais pessoas)</div>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Campanha</th>
+          <th>Tipo</th>
+          <th>Conta</th>
+          <th class="right">Impressoes</th>
+          <th class="right">Cliques</th>
+          <th class="right">Investimento</th>
+          <th class="right">CPC</th>
+          <th class="right">CTR</th>
+          <th>Volume</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="rank">1</td>
+          <td class="region-name">SP Estado Aberto</td>
+          <td><span class="badge badge-green">Engaj.</span></td>
+          <td style="font-size:.68rem;color:var(--text3)">Pre-Camp. Estado</td>
+          <td class="right">1.386.952</td>
+          <td class="right">48.152</td>
+          <td class="right">R$ 6.053</td>
+          <td class="right">R$ 0,13</td>
+          <td class="right"><span class="badge badge-green">3,47%</span></td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-fill green" style="width:100%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="rank">2</td>
+          <td class="region-name">SP Vale / Litoral</td>
+          <td><span class="badge badge-green">Engaj.</span></td>
+          <td style="font-size:.68rem;color:var(--text3)">Camp. Estado</td>
+          <td class="right">780.991</td>
+          <td class="right">22.729</td>
+          <td class="right">R$ 4.313</td>
+          <td class="right">R$ 0,19</td>
+          <td class="right"><span class="badge badge-green">2,91%</span></td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-fill green" style="width:56%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="rank">3</td>
+          <td class="region-name">SP Estado (Alcance 1)</td>
+          <td><span class="badge badge-blue">Alcance</span></td>
+          <td style="font-size:.68rem;color:var(--text3)">Camp. Capital</td>
+          <td class="right">778.691</td>
+          <td class="right">721</td>
+          <td class="right">R$ 1.093</td>
+          <td class="right">R$ 1,52</td>
+          <td class="right"><span class="badge badge-amber">0,09%</span></td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-fill blue" style="width:56%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="rank">4</td>
+          <td class="region-name">SP Capital (Alcance)</td>
+          <td><span class="badge badge-blue">Alcance</span></td>
+          <td style="font-size:.68rem;color:var(--text3)">Camp. Capital</td>
+          <td class="right">333.815</td>
+          <td class="right">395</td>
+          <td class="right">R$ 532</td>
+          <td class="right">R$ 1,35</td>
+          <td class="right"><span class="badge badge-amber">0,12%</span></td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-fill blue" style="width:24%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="rank">5</td>
+          <td class="region-name">SP Capital (Alcance)</td>
+          <td><span class="badge badge-blue">Alcance</span></td>
+          <td style="font-size:.68rem;color:var(--text3)">Pre-Camp. Capital</td>
+          <td class="right">309.959</td>
+          <td class="right">404</td>
+          <td class="right">R$ 443</td>
+          <td class="right">R$ 1,10</td>
+          <td class="right"><span class="badge badge-amber">0,13%</span></td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-fill blue" style="width:22%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="rank">6</td>
+          <td class="region-name">SP Estado (Alcance)</td>
+          <td><span class="badge badge-blue">Alcance</span></td>
+          <td style="font-size:.68rem;color:var(--text3)">Pre-Camp. Capital</td>
+          <td class="right">194.963</td>
+          <td class="right">285</td>
+          <td class="right">R$ 333</td>
+          <td class="right">R$ 1,17</td>
+          <td class="right"><span class="badge badge-amber">0,15%</span></td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-fill blue" style="width:14%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="rank">7</td>
+          <td class="region-name">SP Estado (Alcance + Engaj.)</td>
+          <td><span class="badge badge-blue">Alcance</span></td>
+          <td style="font-size:.68rem;color:var(--text3)">Camp. Capital</td>
+          <td class="right">86.411</td>
+          <td class="right">883</td>
+          <td class="right">R$ 129</td>
+          <td class="right">R$ 0,15</td>
+          <td class="right"><span class="badge badge-green">1,02%</span></td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-fill blue" style="width:6%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="rank">8</td>
+          <td class="region-name">SP Estado — Escalacao</td>
+          <td><span class="badge badge-green">Engaj.</span></td>
+          <td style="font-size:.68rem;color:var(--text3)">Pre-Camp. Estado</td>
+          <td class="right">24.208</td>
+          <td class="right">5.372</td>
+          <td class="right">R$ 110</td>
+          <td class="right">R$ 0,02</td>
+          <td class="right"><span class="badge badge-green">22,19%</span></td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-fill green" style="width:2%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="rank">9</td>
+          <td class="region-name">SP Estado — Dia Meio Ambiente</td>
+          <td><span class="badge badge-green">Engaj.</span></td>
+          <td style="font-size:.68rem;color:var(--text3)">Pre-Camp. Estado</td>
+          <td class="right">17.082</td>
+          <td class="right">1.870</td>
+          <td class="right">R$ 112</td>
+          <td class="right">R$ 0,06</td>
+          <td class="right"><span class="badge badge-green">10,95%</span></td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-fill green" style="width:1.2%"></div></div></td>
+        </tr>
+        <tr>
+          <td class="rank">10</td>
+          <td class="region-name">SP Estado — Esporte</td>
+          <td><span class="badge badge-green">Engaj.</span></td>
+          <td style="font-size:.68rem;color:var(--text3)">Pre-Camp. Estado</td>
+          <td class="right">6.255</td>
+          <td class="right">81</td>
+          <td class="right">R$ 43</td>
+          <td class="right">R$ 0,53</td>
+          <td class="right"><span class="badge badge-blue">1,29%</span></td>
+          <td class="bar-cell"><div class="bar-wrap"><div class="bar-fill green" style="width:0.5%"></div></div></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ====== 5. CONTEÚDO TEMÁTICO ====== -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-title"><span class="dot" style="background:var(--purple)"></span> Conteudo Tematico — Piloto Automatico</div>
+    <div class="section-desc">Campanhas automaticas organizadas por tema. Mostra quais assuntos geram mais engajamento com o publico. Todas rodam na conta Pre-Campanha Capital 26.</div>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Tema do Conteudo</th>
+          <th>Objetivo</th>
+          <th class="right">Impressoes</th>
+          <th class="right">Cliques</th>
+          <th class="right">Investimento</th>
+          <th class="right">CPC</th>
+          <th class="right">CTR</th>
+          <th>Desempenho</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="rank">1</td>
+          <td class="region-name">Direitos Autistas</td>
+          <td><span class="badge badge-green">Engaj.</span></td>
+          <td class="right">9.975</td>
+          <td class="right">762</td>
+          <td class="right">R$ 126</td>
+          <td class="right">R$ 0,17</td>
+          <td class="right"><span class="badge badge-green">7,64%</span></td>
+          <td><span class="perf"><span class="perf-dot excellent"></span> Excelente</span></td>
+        </tr>
+        <tr>
+          <td class="rank">2</td>
+          <td class="region-name">Quem E David Soares</td>
+          <td><span class="badge badge-purple">Trafego</span></td>
+          <td class="right">10.561</td>
+          <td class="right">702</td>
+          <td class="right">R$ 132</td>
+          <td class="right">R$ 0,19</td>
+          <td class="right"><span class="badge badge-green">6,65%</span></td>
+          <td><span class="perf"><span class="perf-dot excellent"></span> Excelente</span></td>
+        </tr>
+        <tr>
+          <td class="rank">3</td>
+          <td class="region-name">Reducao Penal 2</td>
+          <td><span class="badge badge-purple">Trafego</span></td>
+          <td class="right">7.054</td>
+          <td class="right">441</td>
+          <td class="right">R$ 127</td>
+          <td class="right">R$ 0,29</td>
+          <td class="right"><span class="badge badge-green">6,25%</span></td>
+          <td><span class="perf"><span class="perf-dot excellent"></span> Excelente</span></td>
+        </tr>
+        <tr>
+          <td class="rank">4</td>
+          <td class="region-name">Tenha Coragem de Romper</td>
+          <td><span class="badge badge-purple">Trafego</span></td>
+          <td class="right">8.414</td>
+          <td class="right">515</td>
+          <td class="right">R$ 117</td>
+          <td class="right">R$ 0,23</td>
+          <td class="right"><span class="badge badge-green">6,12%</span></td>
+          <td><span class="perf"><span class="perf-dot excellent"></span> Excelente</span></td>
+        </tr>
+        <tr>
+          <td class="rank">5</td>
+          <td class="region-name">Tenha Coragem de Romper</td>
+          <td><span class="badge badge-green">Engaj.</span></td>
+          <td class="right">24.656</td>
+          <td class="right">1.457</td>
+          <td class="right">R$ 121</td>
+          <td class="right">R$ 0,08</td>
+          <td class="right"><span class="badge badge-green">5,91%</span></td>
+          <td><span class="perf"><span class="perf-dot excellent"></span> Excelente</span></td>
+        </tr>
+        <tr>
+          <td class="rank">6</td>
+          <td class="region-name">Reducao Penal 2</td>
+          <td><span class="badge badge-green">Engaj.</span></td>
+          <td class="right">37.304</td>
+          <td class="right">1.776</td>
+          <td class="right">R$ 224</td>
+          <td class="right">R$ 0,13</td>
+          <td class="right"><span class="badge badge-green">4,76%</span></td>
+          <td><span class="perf"><span class="perf-dot excellent"></span> Excelente</span></td>
+        </tr>
+        <tr>
+          <td class="rank">7</td>
+          <td class="region-name">Quem E David Soares</td>
+          <td><span class="badge badge-green">Engaj.</span></td>
+          <td class="right">22.423</td>
+          <td class="right">241</td>
+          <td class="right">R$ 460</td>
+          <td class="right">R$ 1,91</td>
+          <td class="right"><span class="badge badge-blue">1,07%</span></td>
+          <td><span class="perf"><span class="perf-dot good"></span> Bom</span></td>
+        </tr>
+        <tr>
+          <td class="rank">8</td>
+          <td class="region-name">Garantia dos Direitos Autistas</td>
+          <td><span class="badge badge-green">Engaj.</span></td>
+          <td class="right">22.426</td>
+          <td class="right">131</td>
+          <td class="right">R$ 453</td>
+          <td class="right">R$ 3,46</td>
+          <td class="right"><span class="badge badge-blue">0,58%</span></td>
+          <td><span class="perf"><span class="perf-dot ok"></span> Medio</span></td>
+        </tr>
+        <tr>
+          <td class="rank">9</td>
+          <td class="region-name">Diga Nao as Drogas</td>
+          <td><span class="badge badge-green">Engaj.</span></td>
+          <td class="right">16.776</td>
+          <td class="right">33</td>
+          <td class="right">R$ 413</td>
+          <td class="right">R$ 12,52</td>
+          <td class="right"><span class="badge badge-red">0,20%</span></td>
+          <td><span class="perf"><span class="perf-dot low"></span> Baixo</span></td>
+        </tr>
+        <tr>
+          <td class="rank">10</td>
+          <td class="region-name">Voce Esta Disposto</td>
+          <td><span class="badge badge-green">Engaj.</span></td>
+          <td class="right">63.988</td>
+          <td class="right">111</td>
+          <td class="right">R$ 416</td>
+          <td class="right">R$ 3,75</td>
+          <td class="right"><span class="badge badge-red">0,17%</span></td>
+          <td><span class="perf"><span class="perf-dot low"></span> Baixo</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ====== 6. GRÁFICOS ====== -->
+<div class="chart-grid">
+  <div class="chart-card">
+    <h3>Temas que Mais Engajam (CTR)</h3>
+    <div class="chart-desc">Quanto maior a barra, mais pessoas interagiram com o conteudo apos ve-lo.</div>
+    <div class="h-bar">
+      <div class="h-bar-label">Direitos Autistas</div>
+      <div class="h-bar-track"><div class="h-bar-fill" style="width:100%;background:linear-gradient(90deg,var(--green),var(--green2))"><span class="h-bar-val">7,64%</span></div></div>
+      <div class="h-bar-ext">762 cliques</div>
+    </div>
+    <div class="h-bar">
+      <div class="h-bar-label">David Soares (Trafego)</div>
+      <div class="h-bar-track"><div class="h-bar-fill" style="width:87%;background:linear-gradient(90deg,var(--green),var(--green2))"><span class="h-bar-val">6,65%</span></div></div>
+      <div class="h-bar-ext">702 cliques</div>
+    </div>
+    <div class="h-bar">
+      <div class="h-bar-label">Reducao Penal (Trafego)</div>
+      <div class="h-bar-track"><div class="h-bar-fill" style="width:82%;background:linear-gradient(90deg,var(--green),var(--green2))"><span class="h-bar-val">6,25%</span></div></div>
+      <div class="h-bar-ext">441 cliques</div>
+    </div>
+    <div class="h-bar">
+      <div class="h-bar-label">Coragem de Romper (Traf.)</div>
+      <div class="h-bar-track"><div class="h-bar-fill" style="width:80%;background:linear-gradient(90deg,var(--blue),var(--blue2))"><span class="h-bar-val">6,12%</span></div></div>
+      <div class="h-bar-ext">515 cliques</div>
+    </div>
+    <div class="h-bar">
+      <div class="h-bar-label">Coragem de Romper (Engaj.)</div>
+      <div class="h-bar-track"><div class="h-bar-fill" style="width:77%;background:linear-gradient(90deg,var(--blue),var(--blue2))"><span class="h-bar-val">5,91%</span></div></div>
+      <div class="h-bar-ext">1.457 cliques</div>
+    </div>
+    <div class="h-bar">
+      <div class="h-bar-label">Reducao Penal (Engaj.)</div>
+      <div class="h-bar-track"><div class="h-bar-fill" style="width:62%;background:linear-gradient(90deg,var(--blue),var(--blue2))"><span class="h-bar-val">4,76%</span></div></div>
+      <div class="h-bar-ext">1.776 cliques</div>
+    </div>
+    <div class="h-bar">
+      <div class="h-bar-label">David Soares (Engaj.)</div>
+      <div class="h-bar-track"><div class="h-bar-fill" style="width:14%;background:linear-gradient(90deg,var(--purple),var(--purple2))"><span class="h-bar-val">1,07%</span></div></div>
+      <div class="h-bar-ext">241 cliques</div>
+    </div>
+    <div class="h-bar">
+      <div class="h-bar-label">Diga Nao as Drogas</div>
+      <div class="h-bar-track"><div class="h-bar-fill" style="width:3%;background:linear-gradient(90deg,var(--amber),var(--amber2))"><span class="h-bar-val">0,20%</span></div></div>
+      <div class="h-bar-ext">33 cliques</div>
+    </div>
+  </div>
+
+  <div class="chart-card">
+    <h3>Campanhas por Volume de Cliques</h3>
+    <div class="chart-desc">Quais campanhas geraram mais interacoes em numeros absolutos.</div>
+    <div class="h-bar">
+      <div class="h-bar-label">SP Estado Aberto</div>
+      <div class="h-bar-track"><div class="h-bar-fill" style="width:100%;background:linear-gradient(90deg,var(--green),var(--green2))"><span class="h-bar-val">48.152</span></div></div>
+      <div class="h-bar-ext">CTR 3,47%</div>
+    </div>
+    <div class="h-bar">
+      <div class="h-bar-label">SP Vale / Litoral</div>
+      <div class="h-bar-track"><div class="h-bar-fill" style="width:47%;background:linear-gradient(90deg,var(--green),var(--green2))"><span class="h-bar-val">22.729</span></div></div>
+      <div class="h-bar-ext">CTR 2,91%</div>
+    </div>
+    <div class="h-bar">
+      <div class="h-bar-label">Escalacao</div>
+      <div class="h-bar-track"><div class="h-bar-fill" style="width:11%;background:linear-gradient(90deg,var(--blue),var(--blue2))"><span class="h-bar-val">5.372</span></div></div>
+      <div class="h-bar-ext">CTR 22,19%</div>
+    </div>
+    <div class="h-bar">
+      <div class="h-bar-label">Dia Meio Ambiente</div>
+      <div class="h-bar-track"><div class="h-bar-fill" style="width:4%;background:linear-gradient(90deg,var(--blue),var(--blue2))"><span class="h-bar-val">1.870</span></div></div>
+      <div class="h-bar-ext">CTR 10,95%</div>
+    </div>
+    <div class="h-bar">
+      <div class="h-bar-label">Reducao Penal 2 (Eng.)</div>
+      <div class="h-bar-track"><div class="h-bar-fill" style="width:4%;background:linear-gradient(90deg,var(--purple),var(--purple2))"><span class="h-bar-val">1.776</span></div></div>
+      <div class="h-bar-ext">CTR 4,76%</div>
+    </div>
+    <div class="h-bar">
+      <div class="h-bar-label">Coragem de Romper (Eng.)</div>
+      <div class="h-bar-track"><div class="h-bar-fill" style="width:3%;background:linear-gradient(90deg,var(--purple),var(--purple2))"><span class="h-bar-val">1.457</span></div></div>
+      <div class="h-bar-ext">CTR 5,91%</div>
+    </div>
+    <div class="h-bar">
+      <div class="h-bar-label">REACH SP Estado</div>
+      <div class="h-bar-track"><div class="h-bar-fill" style="width:2%;background:linear-gradient(90deg,var(--amber),var(--amber2))"><span class="h-bar-val">883</span></div></div>
+      <div class="h-bar-ext">CTR 1,02%</div>
+    </div>
+    <div class="h-bar">
+      <div class="h-bar-label">Direitos Autistas</div>
+      <div class="h-bar-track"><div class="h-bar-fill" style="width:2%;background:linear-gradient(90deg,var(--purple),var(--purple2))"><span class="h-bar-val">762</span></div></div>
+      <div class="h-bar-ext">CTR 7,64%</div>
+    </div>
+  </div>
+</div>
+
+<!-- ====== 7. INSIGHTS E RECOMENDAÇÕES ====== -->
+<div class="insights">
+  <h3>Insights e Recomendacoes — Junho 2026</h3>
+
+  <div class="insight-item">
+    <div class="insight-icon green-bg">&#9650;</div>
+    <div class="insight-text">
+      <strong>Junho foi o mes mais focado em Sao Paulo ate agora.</strong>
+      99,5% das impressoes foram dentro do estado, com apenas 4 outros estados recebendo anuncios de forma residual. Isso mostra uma estrategia bem direcionada para o publico-alvo: eleitores paulistas para deputado federal.
+    </div>
+  </div>
+
+  <div class="insight-item">
+    <div class="insight-icon green-bg">&#9733;</div>
+    <div class="insight-text">
+      <strong>"Escalacao" foi o conteudo campeao do mes com CTR de 22,19%.</strong>
+      A cada 5 pessoas que viram esse anuncio, 1 interagiu. Gastou apenas R$ 110 e gerou 5.372 cliques — o melhor custo-beneficio do mes com CPC de R$ 0,02. Recomendacao: criar mais conteudos nesse formato (tematica esportiva/gamificacao).
+    </div>
+  </div>
+
+  <div class="insight-item">
+    <div class="insight-icon blue-bg">&#9679;</div>
+    <div class="insight-text">
+      <strong>"Dia do Meio Ambiente" tambem performou muito bem (CTR 10,95%).</strong>
+      Conteudos ligados a datas comemorativas e pautas sociais geram alto engajamento. O CPC foi de apenas R$ 0,06. Considere replicar a estrategia com outras datas relevantes do calendario (Dia da Independencia, Dia do Professor, etc.).
+    </div>
+  </div>
+
+  <div class="insight-item">
+    <div class="insight-icon purple-bg">&#10003;</div>
+    <div class="insight-text">
+      <strong>Temas de seguranca publica e valores pessoais ressoam bem.</strong>
+      "Reducao Penal" (CTR 4,76% engaj. / 6,25% trafego), "Tenha Coragem de Romper" (5,91% / 6,12%) e "Direitos Autistas" (7,64%) sao os temas que mais conectam com o eleitor. Esses 3 eixos tematicos devem ser priorizados na producao de conteudo do proximo mes.
+    </div>
+  </div>
+
+  <div class="insight-item">
+    <div class="insight-icon amber-bg">&#9888;</div>
+    <div class="insight-text">
+      <strong>"Diga Nao as Drogas" e "Voce Esta Disposto" precisam de revisao.</strong>
+      Ambos tem CTR abaixo de 0,20% e CPC acima de R$ 3,75 — desempenho muito abaixo da media. "Diga Nao as Drogas" gastou R$ 413 para apenas 33 cliques (CPC R$ 12,52). Recomendacao: pausar essas campanhas e redirecionar a verba para os temas com melhor performance.
+    </div>
+  </div>
+
+  <div class="insight-item">
+    <div class="insight-icon blue-bg">&#8594;</div>
+    <div class="insight-text">
+      <strong>Conta "Pre-Campanha Estado 26" lidera em eficiencia.</strong>
+      Com CTR de 3,87% e CPC de R$ 0,11, essa conta entrega o melhor retorno por real investido. Em contraste, a "Campanha Capital 26" tem CTR de apenas 0,17% (campanhas de alcance puro). Para julho, considere realocar parte da verba de alcance para engajamento.
+    </div>
+  </div>
+
+  <div class="insight-item">
+    <div class="insight-icon green-bg">&#128200;</div>
+    <div class="insight-text">
+      <strong>O CTR geral de junho (2,10%) superou a media do semestre (1,77%).</strong>
+      A concentracao geografica e a melhoria dos criativos elevaram a taxa de engajamento. Para manter essa tendencia, continue investindo nos temas campeoes e testando novos formatos com base nos aprendizados do Piloto Automatico.
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  Relatorio gerado automaticamente a partir dos dados do Meta Ads API<br/>
+  Campanha David Soares — Deputado Federal SP 2026<br/>
+  Periodo: Junho 2026 | Data de geracao: 30/06/2026
+</div>
+
+</div>
+</body>
+</html>

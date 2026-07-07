@@ -238,6 +238,39 @@ R$10k/mês       R$10k (1-15)      R$220k      R$300k
 
 > Concentração em setembro/outubro: a decisão de voto se forma nos últimos 30 dias. Gastar pesado antes disso antecipa o gasto sem retorno equivalente.
 
+### Execução Real — Pré-Campanha (atualizado 07/07/2026)
+
+#### Gasto Mensal Realizado
+
+| Mês | Campanha Estado | Pré-Camp. Estado | Camp. Capital | Pré-Camp. Capital | Total |
+|---|---|---|---|---|---|
+| **Maio/26** | R$ 9.682,68 | R$ 10.715,55 | — | — | R$ 20.398,23 |
+| **Junho/26** | R$ 4.313,04 | R$ 6.317,73 | R$ 1.753,52 | R$ 3.377,88 | R$ 15.762,17 |
+| **Julho/26 (meta)** | R$ 1.750,00 | R$ 2.000,00 | R$ 1.250,00 | pausada | R$ 5.000,00 |
+| **Total** | **R$ 15.745,72** | **R$ 19.033,28** | **R$ 3.003,52** | **R$ 3.377,88** | **R$ 41.160,40** |
+
+#### Orçamento Diário — Julho 2026 (R$ 5.000 total / 3 contas)
+
+**Cenário A — Mês cheio (31 dias):**
+
+| Conta | Budget Julho | Diário | Configurar no Meta |
+|---|---|---|---|
+| Pré-Campanha Estado 26 | R$ 2.000 (40%) | **R$ 64,50/dia** | R$ 65/dia |
+| Campanha Estado 26 | R$ 1.750 (35%) | **R$ 56,45/dia** | R$ 56/dia |
+| Campanha Capital 26 | R$ 1.250 (25%) | **R$ 40,32/dia** | R$ 40/dia |
+| **Total** | **R$ 5.000** | **R$ 161,27/dia** | **R$ 161/dia** |
+
+**Cenário B — Restante do mês (24 dias: 8-31/jul):**
+
+| Conta | Budget Julho | Diário | Configurar no Meta |
+|---|---|---|---|
+| Pré-Campanha Estado 26 | R$ 2.000 (40%) | **R$ 83,33/dia** | R$ 83/dia |
+| Campanha Estado 26 | R$ 1.750 (35%) | **R$ 72,92/dia** | R$ 73/dia |
+| Campanha Capital 26 | R$ 1.250 (25%) | **R$ 52,08/dia** | R$ 52/dia |
+| **Total** | **R$ 5.000** | **R$ 208,33/dia** | **R$ 208/dia** |
+
+> **Nota:** Usar Cenário A se as campanhas já estavam rodando desde 01/jul. Usar Cenário B se estão sendo ativadas a partir de 08/jul. Verificar gasto acumulado dos primeiros 7 dias no Meta Ads Manager e descontar do budget restante.
+
 ---
 
 ## Visão Consolidada
